@@ -42,12 +42,16 @@ window.onload = function init() {
         gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
         
         // Calculate coordinates of new point
-        var t = vec2(2*e.offsetX/canvas.width-1, 2*(canvas.height-e.offsetY)/canvas.height-1);
+        var top = vec2(2*e.offsetX/canvas.width-1, 2*(canvas.height-e.offsetY)/canvas.height-1+0.1);
+        var left = vec2(2*e.offsetX/canvas.width-1-0.1, 2*(canvas.height-e.offsetY)/canvas.height-1-0.1);
+        var right = vec2(2*e.offsetX/canvas.width-1+0.1, 2*(canvas.height-e.offsetY)/canvas.height-1-0.1);
         
         // Add new point behind the others
-        gl.bufferSubData(gl.ARRAY_BUFFER, 8*index, flatten(t));
+        gl.bufferSubData(gl.ARRAY_BUFFER, 8*index, flatten(top));
+        gl.bufferSubData(gl.ARRAY_BUFFER, 8*(index + 1), flatten(left));
+        gl.bufferSubData(gl.ARRAY_BUFFER, 8*(index + 2), flatten(right));
 
-        index++;
+        index+=3;
     } );
 
     render();
@@ -57,7 +61,7 @@ window.onload = function init() {
 function render() {
     
     gl.clear( gl.COLOR_BUFFER_BIT );
-    gl.drawArrays( gl.POINTS, 0, index );
+    gl.drawArrays( gl.TRIANGLES, 0, index );
 
     window.requestAnimFrame(render);
 }
